@@ -122,7 +122,7 @@ class HomePageState extends State<HomePage> {
             Card(
               child: ListTile(
                   shape: BeveledRectangleBorder(
-                    side: BorderSide(color: Colors.blue, width: 1),
+                    side: BorderSide(color: Colors.white, width: 1),
                   ),
                   iconColor: Colors.blue,
                   leading: Icon(

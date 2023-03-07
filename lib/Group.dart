@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'Note.dart';
 import 'package:bs_flutter_modal/bs_flutter_modal.dart';
+import 'package:date_field/date_field.dart';
+
 // import 'package:table_calendar/table_calendar.dart';
 
 class Group extends StatefulWidget {
@@ -19,10 +21,15 @@ class GroupState extends State<Group> {
     // }
   ];
 
-  var getUniteList;
+  List<String> loopList = ['สัปดาห์', 'เดือน', 'ปี'];
 
-  Map<String, dynamic> newUnit = {
-    'homewoik1': ['time', 'date', 'loop']
+  var newUnitName;
+  var newUnitDate;
+  var newUnitTime;
+  var newUnitLoop;
+
+  Map<String, List<String>> newUnit = {
+    // 'homewoik1': ['time', 'date', 'loop']
   };
 
   findSelectedValue() {
@@ -32,25 +39,21 @@ class GroupState extends State<Group> {
               .toString()
               .substring(1, myList[i].keys.toString().length - 1) ==
           widget.groupName) {
-        // var keepList = myList[i][widget.groupName];
-        // print(keepList.runtimeType);
         getWorkList = myList[i][widget.groupName];
         workList = getWorkList;
-        // print("this function ${testWorklist.runtimeType}");
-        print("this function ${workList}");
       }
     }
   }
 
-  addNewUnitWork() {
+  addNewUnitWork(newUnit) {
     for (var i = 0; i < myList.length; i++) {
       if (myList[i]
               .keys
               .toString()
               .substring(1, myList[i].keys.toString().length - 1) ==
           widget.groupName) {
-        getUniteList = myList[i][widget.groupName];
-        print(myList[i][widget.groupName].runtimeType);
+        myList[i][widget.groupName]?.add(newUnit);
+        Note().setAllNewNoteList(myList);
       }
     }
   }
@@ -59,7 +62,7 @@ class GroupState extends State<Group> {
   void initState() {
     // TODO: implement initState
     findSelectedValue();
-    addNewUnitWork();
+    // addNewUnitWork();
     super.initState();
   }
 
@@ -229,7 +232,7 @@ class GroupState extends State<Group> {
               Card(
                 child: ListTile(
                     shape: BeveledRectangleBorder(
-                      side: BorderSide(color: Colors.blue, width: 1),
+                      side: BorderSide(color: Colors.white, width: 1),
                     ),
                     iconColor: Colors.blue,
                     leading: Icon(
@@ -252,23 +255,238 @@ class GroupState extends State<Group> {
                                 ),
                                 children: [
                                   BsModalContainer(
-                                      title: Text('เพิ่มงานย่อย'),
+                                      title: Text('+ เพิ่มงานย่อย',
+                                          style: TextStyle(color: Colors.blue)),
                                       closeButton: true),
                                   BsModalContainer(
-                                    child: TextFormField(
-                                      // controller: emailController,
-                                      onChanged: (value) {},
-                                      // key: formKey,
-                                      decoration: const InputDecoration(
-                                        hintText: "กรอกชื่องานย่อย",
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                          Radius.circular(15),
-                                        )),
-                                        // hintText: 'Kittiwat',
+                                      child: Column(
+                                    children: [
+                                      TextFormField(
+                                        // controller: emailController,
+                                        onChanged: (value) {
+                                          newUnitName = value;
+                                        },
+                                        // key: formKey,
+                                        decoration: const InputDecoration(
+                                          hintText: "ชื่องานย่อย",
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                            Radius.circular(15.0),
+                                          )),
+                                          // hintText: 'Kittiwat',
+                                        ),
                                       ),
-                                    ),
-                                  ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      DateTimeFormField(
+                                        decoration: const InputDecoration(
+                                          hintStyle: TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12),
+                                          errorStyle: TextStyle(
+                                              color: Colors.redAccent),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15.0)),
+                                            // borderSide: const BorderSide(
+                                            //   width: 0,
+                                            //   style: BorderStyle.none,
+                                            // ),
+                                          ),
+                                          suffixIcon: Icon(
+                                            Icons.event_note,
+                                            size: 15,
+                                          ),
+                                          labelText: 'วันที่ครบกำหนด',
+                                        ),
+                                        mode: DateTimeFieldPickerMode.date,
+                                        autovalidateMode:
+                                            AutovalidateMode.always,
+                                        validator: (DateTime? e) {
+                                          return (e?.day ?? 0) == 1
+                                              ? 'Please not the first day'
+                                              : null;
+                                        },
+                                        onDateSelected: (DateTime value) {
+                                          newUnitDate = value.toString();
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      DateTimeFormField(
+                                        decoration: const InputDecoration(
+                                          hintStyle: TextStyle(
+                                              color: Colors.black45,
+                                              fontSize: 12),
+                                          errorStyle: TextStyle(
+                                              color: Colors.redAccent),
+                                          border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(15.0)),
+                                            // borderSide: const BorderSide(
+                                            //   width: 0,
+                                            //   style: BorderStyle.none,
+                                            // ),
+                                          ),
+                                          suffixIcon: Icon(
+                                            Icons.access_time,
+                                            size: 15,
+                                          ),
+                                          labelText: 'เวลา',
+                                        ),
+                                        mode: DateTimeFieldPickerMode.time,
+                                        autovalidateMode:
+                                            AutovalidateMode.always,
+                                        validator: (DateTime? e) {
+                                          return (e?.day ?? 0) == 1
+                                              ? 'Please not the first day'
+                                              : null;
+                                        },
+                                        onDateSelected: (DateTime value) {
+                                          newUnitTime = value.toString();
+                                        },
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Container(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                              "ทำงานซ้ำ",
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.black,
+                                              ),
+                                            ),
+                                            DropdownButtonHideUnderline(
+                                              child: DropdownButton2(
+                                                isExpanded: true,
+                                                hint: const Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      width: 4,
+                                                    ),
+                                                    Expanded(
+                                                      child: Text(
+                                                        'ทำงานซ้ำ',
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: Colors.black,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                items: loopList
+                                                    .map((item) =>
+                                                        DropdownMenuItem<
+                                                            String>(
+                                                          value:
+                                                              item.toString(),
+                                                          child: Text(
+                                                            item.toString(),
+                                                            style:
+                                                                const TextStyle(
+                                                              fontSize: 14,
+                                                              // fontWeight: FontWeight.bold,
+                                                              color:
+                                                                  Colors.black,
+                                                            ),
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ))
+                                                    .toList(),
+                                                value: loopList.first,
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    newUnitLoop = value;
+                                                  });
+                                                },
+                                                buttonStyleData:
+                                                    ButtonStyleData(
+                                                  height: 30,
+                                                  width: 150,
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 14, right: 14),
+                                                  decoration: BoxDecoration(
+                                                    boxShadow: const [
+                                                      BoxShadow(
+                                                        color: Colors.white,
+                                                        offset: Offset(0, 0),
+                                                        blurRadius: 0.0,
+                                                        spreadRadius: 0.0,
+                                                      )
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            14),
+                                                    border: Border.all(
+                                                      color: Colors.white,
+                                                      width: 0.0,
+                                                    ),
+                                                    color: Colors.white,
+                                                  ),
+                                                  elevation: 2,
+                                                ),
+                                                iconStyleData:
+                                                    const IconStyleData(
+                                                  icon: Icon(
+                                                    Icons.keyboard_arrow_down,
+                                                  ),
+                                                  iconSize: 14,
+                                                  iconEnabledColor: Colors.grey,
+                                                  iconDisabledColor:
+                                                      Colors.grey,
+                                                ),
+                                                dropdownStyleData:
+                                                    DropdownStyleData(
+                                                  maxHeight: 150,
+                                                  width: 150,
+                                                  padding: null,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            14),
+                                                    color: Colors.white,
+                                                  ),
+                                                  elevation: 8,
+                                                  offset: const Offset(0, 30),
+                                                  scrollbarTheme:
+                                                      ScrollbarThemeData(
+                                                    radius:
+                                                        const Radius.circular(
+                                                            40),
+                                                    thickness:
+                                                        MaterialStateProperty
+                                                            .all<double>(6),
+                                                    thumbVisibility:
+                                                        MaterialStateProperty
+                                                            .all<bool>(true),
+                                                  ),
+                                                ),
+                                                menuItemStyleData:
+                                                    const MenuItemStyleData(
+                                                  height: 30,
+                                                  padding: EdgeInsets.only(
+                                                      left: 10, right: 10),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )),
                                   BsModalContainer(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     actions: [
@@ -288,7 +506,15 @@ class GroupState extends State<Group> {
                                           )),
                                       ElevatedButton(
                                           onPressed: () {
-                                            setState(() {});
+                                            setState(() {
+                                              addNewUnitWork({
+                                                "$newUnitName": [
+                                                  '$newUnitDate',
+                                                  '$newUnitTime',
+                                                  '$newUnitLoop'
+                                                ]
+                                              });
+                                            });
                                             Navigator.pop(context);
                                           },
                                           style: ElevatedButton.styleFrom(
