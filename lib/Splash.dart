@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-// import 'package:clothing_store/constant/Roboto.dart';
+import 'HomePage.dart';
 
 class Splash extends StatelessWidget {
   @override
-  Widget build(BuildContext) {
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -45,7 +45,10 @@ class Splash extends StatelessWidget {
               width: 148.0,
               height: 40.0,
               child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomePage()));
+                  },
                   child: (Text(
                     "เริ่มใช้งาน",
                     style: TextStyle(
