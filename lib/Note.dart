@@ -3,10 +3,10 @@ class Note {
     {
       'homework': [
         {
-          'homewoik1': ['time', 'date', 'loop']
+          'homewoik1': ['2023-03-03', 'date', 'loop']
         },
         {
-          'homewoik2': ['time', 'date', 'loop']
+          'homewoik2': ['2023-04-16', 'date', 'loop']
         }
       ]
     },

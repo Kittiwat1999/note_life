@@ -224,6 +224,11 @@ class GroupState extends State<Group> {
                                 style: TextStyle(
                                     fontFamily: 'Roboto', fontSize: 15),
                               ),
+                              trailing: Text(
+                                  e.values.toString().substring(2, 12) +
+                                      "," +
+                                      e.values.toString().substring(
+                                          20, e.values.toString().length - 2)),
                               onTap: () {
                                 showEditModal(e.keys.toString().substring(
                                     1, e.keys.toString().length - 1));
@@ -234,17 +239,18 @@ class GroupState extends State<Group> {
                 ),
               ),
               Card(
+                color: Colors.blue,
                 child: ListTile(
                     shape: BeveledRectangleBorder(
                       side: BorderSide(color: Colors.white, width: 1),
                     ),
-                    iconColor: Colors.blue,
+                    iconColor: Colors.white,
                     leading: Icon(
                       Icons.add_rounded,
                     ),
                     title: Text(
                       'เพิ่มงานย่อย',
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Colors.white),
                     ),
                     onTap: () => showDialog(
                         context: context,
@@ -317,7 +323,11 @@ class GroupState extends State<Group> {
                                                 : null;
                                           },
                                           onDateSelected: (DateTime value) {
-                                            newUnitDate = value.toString();
+                                            print(value);
+                                            newUnitDate = value
+                                                .toString()
+                                                .substring(0, 10);
+                                            print(newUnitDate);
                                           },
                                         ),
                                         SizedBox(
@@ -353,7 +363,13 @@ class GroupState extends State<Group> {
                                                 : null;
                                           },
                                           onDateSelected: (DateTime value) {
-                                            newUnitTime = value.toString();
+                                            newUnitTime = value
+                                                .toString()
+                                                .substring(
+                                                    11,
+                                                    value.toString().length -
+                                                        7);
+                                            print(newUnitTime);
                                           },
                                         ),
                                         SizedBox(
@@ -437,14 +453,17 @@ class GroupState extends State<Group> {
                                         ElevatedButton(
                                             onPressed: () {
                                               setState(() {
+                                                print(newUnitDate);
                                                 Map<String, List<String>>
                                                     buttonnewUnit = {
                                                   "${newUnitName.toString()}": [
-                                                    '',
-                                                    '',
-                                                    ''
+                                                    '${newUnitDate.toString()}',
+                                                    '${newUnitTime.toString()}',
+                                                    '${newUnitLoop.toString()}'
                                                   ]
                                                 };
+                                                print(newUnitDate);
+
                                                 addNewUnitWork(buttonnewUnit);
                                                 Navigator.pop(context);
                                               });
@@ -470,41 +489,6 @@ class GroupState extends State<Group> {
               )
             ]),
           ),
-          Container(
-            color: Colors.white,
-            height: 170,
-            child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    elevation: 0.0,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: Text(
-                    "ยกเลิก",
-                    style: TextStyle(color: Colors.blue),
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      ;
-                    });
-                    Navigator.pop(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    elevation: 0.0,
-                    shadowColor: Colors.transparent,
-                  ),
-                  child: Text(
-                    "บันทึก",
-                    style: TextStyle(color: Colors.blue),
-                  ))
-            ]),
-          )
         ],
       ),
     ));
@@ -552,7 +536,7 @@ class GroupState extends State<Group> {
             IconButton(
                 onPressed: () {},
                 icon: const Icon(
-                  Icons.import_export,
+                  Icons.event,
                   size: 30,
                   color: Colors.white,
                 )),
