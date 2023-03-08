@@ -21,12 +21,12 @@ class GroupState extends State<Group> {
     // }
   ];
 
-  List<String> loopList = ['สัปดาห์', 'เดือน', 'ปี'];
+  List<String> loopList = ['ครั้งเดียว', 'สัปดาห์', 'เดือน', 'ปี'];
 
   var newUnitName;
   var newUnitDate;
   var newUnitTime;
-  var newUnitLoop;
+  var newUnitLoop = 'ครั้งเดียว';
 
   Map<String, List<String>> newUnit = {
     // 'homewoik1': ['time', 'date', 'loop']
@@ -54,6 +54,10 @@ class GroupState extends State<Group> {
           widget.groupName) {
         myList[i][widget.groupName]?.add(newUnit);
         Note().setAllNewNoteList(myList);
+        setState(() {
+          myList = Note.myList;
+        });
+        print(myList.toString());
       }
     }
   }
@@ -67,7 +71,7 @@ class GroupState extends State<Group> {
   }
 
   @override
-  Widget build(context) {
+  Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
@@ -243,297 +247,226 @@ class GroupState extends State<Group> {
                       style: TextStyle(color: Colors.blue),
                     ),
                     onTap: () => showDialog(
-                          context: context,
-                          builder: (context) => BsModal(
-                            context: context,
-                            dialog: BsModalDialog(
-                              size: BsModalSize.sm,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              child: BsModalContent(
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                ),
-                                children: [
-                                  BsModalContainer(
-                                      title: Text('+ เพิ่มงานย่อย',
-                                          style: TextStyle(color: Colors.blue)),
-                                      closeButton: true),
-                                  BsModalContainer(
-                                      child: Column(
-                                    children: [
-                                      TextFormField(
-                                        // controller: emailController,
-                                        onChanged: (value) {
-                                          newUnitName = value;
-                                        },
-                                        // key: formKey,
-                                        decoration: const InputDecoration(
-                                          hintText: "ชื่องานย่อย",
-                                          border: OutlineInputBorder(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return StatefulBuilder(
+                              builder: (context, StateSetter setState) {
+                            return BsModal(
+                              context: context,
+                              dialog: BsModalDialog(
+                                size: BsModalSize.sm,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                child: BsModalContent(
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                  children: [
+                                    BsModalContainer(
+                                        title: Text('+ เพิ่มงานย่อย',
+                                            style:
+                                                TextStyle(color: Colors.blue)),
+                                        closeButton: true),
+                                    BsModalContainer(
+                                        child: Column(
+                                      children: [
+                                        TextFormField(
+                                          // controller: emailController,
+                                          onChanged: (value) {
+                                            newUnitName = value;
+                                          },
+                                          // key: formKey,
+                                          decoration: const InputDecoration(
+                                            hintText: "ชื่องานย่อย",
+                                            border: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                              Radius.circular(15.0),
+                                            )),
+                                            // hintText: 'Kittiwat',
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        DateTimeFormField(
+                                          decoration: const InputDecoration(
+                                            hintStyle: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 12),
+                                            errorStyle: TextStyle(
+                                                color: Colors.redAccent),
+                                            border: OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
-                                            Radius.circular(15.0),
-                                          )),
-                                          // hintText: 'Kittiwat',
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      DateTimeFormField(
-                                        decoration: const InputDecoration(
-                                          hintStyle: TextStyle(
-                                              color: Colors.black45,
-                                              fontSize: 12),
-                                          errorStyle: TextStyle(
-                                              color: Colors.redAccent),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15.0)),
-                                            // borderSide: const BorderSide(
-                                            //   width: 0,
-                                            //   style: BorderStyle.none,
-                                            // ),
-                                          ),
-                                          suffixIcon: Icon(
-                                            Icons.event_note,
-                                            size: 15,
-                                          ),
-                                          labelText: 'วันที่ครบกำหนด',
-                                        ),
-                                        mode: DateTimeFieldPickerMode.date,
-                                        autovalidateMode:
-                                            AutovalidateMode.always,
-                                        validator: (DateTime? e) {
-                                          return (e?.day ?? 0) == 1
-                                              ? 'Please not the first day'
-                                              : null;
-                                        },
-                                        onDateSelected: (DateTime value) {
-                                          newUnitDate = value.toString();
-                                        },
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      DateTimeFormField(
-                                        decoration: const InputDecoration(
-                                          hintStyle: TextStyle(
-                                              color: Colors.black45,
-                                              fontSize: 12),
-                                          errorStyle: TextStyle(
-                                              color: Colors.redAccent),
-                                          border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(15.0)),
-                                            // borderSide: const BorderSide(
-                                            //   width: 0,
-                                            //   style: BorderStyle.none,
-                                            // ),
-                                          ),
-                                          suffixIcon: Icon(
-                                            Icons.access_time,
-                                            size: 15,
-                                          ),
-                                          labelText: 'เวลา',
-                                        ),
-                                        mode: DateTimeFieldPickerMode.time,
-                                        autovalidateMode:
-                                            AutovalidateMode.always,
-                                        validator: (DateTime? e) {
-                                          return (e?.day ?? 0) == 1
-                                              ? 'Please not the first day'
-                                              : null;
-                                        },
-                                        onDateSelected: (DateTime value) {
-                                          newUnitTime = value.toString();
-                                        },
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            Text(
-                                              "ทำงานซ้ำ",
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.black,
-                                              ),
+                                                  Radius.circular(15.0)),
+                                              // borderSide: const BorderSide(
+                                              //   width: 0,
+                                              //   style: BorderStyle.none,
+                                              // ),
                                             ),
-                                            DropdownButtonHideUnderline(
-                                              child: DropdownButton2(
-                                                isExpanded: true,
-                                                hint: const Row(
-                                                  children: [
-                                                    SizedBox(
-                                                      width: 4,
-                                                    ),
-                                                    Expanded(
-                                                      child: Text(
-                                                        'ทำงานซ้ำ',
-                                                        style: TextStyle(
-                                                          fontSize: 12,
-                                                          color: Colors.black,
-                                                        ),
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                items: loopList
-                                                    .map((item) =>
-                                                        DropdownMenuItem<
-                                                            String>(
-                                                          value:
-                                                              item.toString(),
-                                                          child: Text(
-                                                            item.toString(),
-                                                            style:
-                                                                const TextStyle(
-                                                              fontSize: 14,
-                                                              // fontWeight: FontWeight.bold,
-                                                              color:
-                                                                  Colors.black,
-                                                            ),
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                          ),
-                                                        ))
-                                                    .toList(),
-                                                value: loopList.first,
-                                                onChanged: (value) {
-                                                  setState(() {
-                                                    newUnitLoop = value;
-                                                  });
-                                                },
-                                                buttonStyleData:
-                                                    ButtonStyleData(
-                                                  height: 30,
-                                                  width: 150,
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 14, right: 14),
-                                                  decoration: BoxDecoration(
-                                                    boxShadow: const [
-                                                      BoxShadow(
-                                                        color: Colors.white,
-                                                        offset: Offset(0, 0),
-                                                        blurRadius: 0.0,
-                                                        spreadRadius: 0.0,
-                                                      )
-                                                    ],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    border: Border.all(
-                                                      color: Colors.white,
-                                                      width: 0.0,
-                                                    ),
-                                                    color: Colors.white,
+                                            suffixIcon: Icon(
+                                              Icons.event_note,
+                                              size: 15,
+                                            ),
+                                            labelText: 'วันที่ครบกำหนด',
+                                          ),
+                                          mode: DateTimeFieldPickerMode.date,
+                                          autovalidateMode:
+                                              AutovalidateMode.always,
+                                          validator: (DateTime? e) {
+                                            return (e?.day ?? 0) == 1
+                                                ? 'Please not the first day'
+                                                : null;
+                                          },
+                                          onDateSelected: (DateTime value) {
+                                            newUnitDate = value.toString();
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        DateTimeFormField(
+                                          decoration: const InputDecoration(
+                                            hintStyle: TextStyle(
+                                                color: Colors.black45,
+                                                fontSize: 12),
+                                            errorStyle: TextStyle(
+                                                color: Colors.redAccent),
+                                            border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(15.0)),
+                                              // borderSide: const BorderSide(
+                                              //   width: 0,
+                                              //   style: BorderStyle.none,
+                                              // ),
+                                            ),
+                                            suffixIcon: Icon(
+                                              Icons.access_time,
+                                              size: 15,
+                                            ),
+                                            labelText: 'เวลา',
+                                          ),
+                                          mode: DateTimeFieldPickerMode.time,
+                                          autovalidateMode:
+                                              AutovalidateMode.always,
+                                          validator: (DateTime? e) {
+                                            return (e?.day ?? 0) == 1
+                                                ? 'Please not the first day'
+                                                : null;
+                                          },
+                                          onDateSelected: (DateTime value) {
+                                            newUnitTime = value.toString();
+                                          },
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Container(
+                                          // height: 47,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                color: Colors.grey.shade400,
+                                                width: 1.5,
+                                              )),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(left: 10),
+                                                child: Text(
+                                                  "ทำงานซ้ำ",
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey,
                                                   ),
-                                                  elevation: 2,
                                                 ),
-                                                iconStyleData:
-                                                    const IconStyleData(
+                                              ),
+                                              Container(
+                                                margin:
+                                                    EdgeInsets.only(right: 10),
+                                                child: DropdownButton(
+                                                  isExpanded: false,
                                                   icon: Icon(
-                                                    Icons.keyboard_arrow_down,
+                                                    Icons.arrow_drop_down,
+                                                    color: Colors.grey,
                                                   ),
-                                                  iconSize: 14,
-                                                  iconEnabledColor: Colors.grey,
-                                                  iconDisabledColor:
-                                                      Colors.grey,
-                                                ),
-                                                dropdownStyleData:
-                                                    DropdownStyleData(
-                                                  maxHeight: 150,
-                                                  width: 150,
-                                                  padding: null,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            14),
-                                                    color: Colors.white,
-                                                  ),
-                                                  elevation: 8,
-                                                  offset: const Offset(0, 30),
-                                                  scrollbarTheme:
-                                                      ScrollbarThemeData(
-                                                    radius:
-                                                        const Radius.circular(
-                                                            40),
-                                                    thickness:
-                                                        MaterialStateProperty
-                                                            .all<double>(6),
-                                                    thumbVisibility:
-                                                        MaterialStateProperty
-                                                            .all<bool>(true),
-                                                  ),
-                                                ),
-                                                menuItemStyleData:
-                                                    const MenuItemStyleData(
-                                                  height: 30,
-                                                  padding: EdgeInsets.only(
-                                                      left: 10, right: 10),
+                                                  items: loopList
+                                                      .map((item) =>
+                                                          DropdownMenuItem<
+                                                              String>(
+                                                            value: item,
+                                                            child: Text(
+                                                              item,
+                                                            ),
+                                                          ))
+                                                      .toList(),
+                                                  value: newUnitLoop,
+                                                  onChanged: (value) {
+                                                    setState(() {
+                                                      newUnitLoop =
+                                                          value.toString();
+                                                      print(newUnitLoop);
+                                                    });
+                                                  },
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  )),
-                                  BsModalContainer(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    actions: [
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
-                                            elevation: 0.0,
-                                            shadowColor: Colors.transparent,
-                                          ),
-                                          child: Text(
-                                            "ยกเลิก",
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          )),
-                                      ElevatedButton(
-                                          onPressed: () {
-                                            setState(() {
-                                              addNewUnitWork({
-                                                "$newUnitName": [
-                                                  '$newUnitDate',
-                                                  '$newUnitTime',
-                                                  '$newUnitLoop'
-                                                ]
+                                      ],
+                                    )),
+                                    BsModalContainer(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 0.0,
+                                              shadowColor: Colors.transparent,
+                                            ),
+                                            child: Text(
+                                              "ยกเลิก",
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            )),
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              setState(() {
+                                                Map<String, List<String>>
+                                                    buttonnewUnit = {
+                                                  "${newUnitName.toString()}": [
+                                                    '',
+                                                    '',
+                                                    ''
+                                                  ]
+                                                };
+                                                addNewUnitWork(buttonnewUnit);
+                                                Navigator.pop(context);
                                               });
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: Colors.white,
-                                            elevation: 0.0,
-                                            shadowColor: Colors.transparent,
-                                          ),
-                                          child: Text(
-                                            "บันทึก",
-                                            style:
-                                                TextStyle(color: Colors.blue),
-                                          ))
-                                    ],
-                                  )
-                                ],
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor: Colors.white,
+                                              elevation: 0.0,
+                                              shadowColor: Colors.transparent,
+                                            ),
+                                            child: Text(
+                                              "บันทึก",
+                                              style:
+                                                  TextStyle(color: Colors.blue),
+                                            ))
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                            ),
-                          ),
-                        )),
+                            );
+                          });
+                        })),
               )
             ]),
           ),
