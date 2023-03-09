@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'HomePage.dart';
 import 'Note.dart';
 import 'package:bs_flutter_modal/bs_flutter_modal.dart';
 import 'package:date_field/date_field.dart';
@@ -23,9 +24,9 @@ class GroupState extends State<Group> {
 
   List<String> loopList = ['ครั้งเดียว', 'สัปดาห์', 'เดือน', 'ปี'];
 
-  var newUnitName;
-  var newUnitDate;
-  var newUnitTime;
+  var newUnitName = "Noname";
+  var newUnitDate = DateTime.now().toString();
+  var newUnitTime = DateTime.now().toString();
   var newUnitLoop = 'ครั้งเดียว';
 
   Map<String, List<String>> newUnit = {
@@ -54,8 +55,12 @@ class GroupState extends State<Group> {
           widget.groupName) {
         myList[i][widget.groupName]?.add(newUnit);
         Note().setAllNewNoteList(myList);
+        print(newUnit.runtimeType);
+        Note().addWork(newUnit);
+        print(Note().getAllWork());
         setState(() {
           myList = Note.myList;
+          Note.allWork;
         });
         // print(myList.toString());
       }
@@ -65,8 +70,10 @@ class GroupState extends State<Group> {
   editUniteWork(workName, editUnit) {
     for (var i = 0; i < workList.length; i++) {
       if (workList[i].keys.toString() == workName.toString()) {
+        Note().editWork(editUnit, workList[i]);
         workList.remove(workList[i]);
         workList.add(editUnit);
+
         print(true);
       }
     }
@@ -77,10 +84,10 @@ class GroupState extends State<Group> {
               .substring(1, myList[i].keys.toString().length - 1) ==
           widget.groupName) {
         myList[i].remove(myList[i][widget.groupName]);
-
         Note().setAllNewNoteList(myList);
         setState(() {
           myList = Note.myList;
+          Note.allWork;
         });
       }
     }
@@ -89,6 +96,7 @@ class GroupState extends State<Group> {
   deleteUnitData(workName) {
     for (var i = 0; i < workList.length; i++) {
       if (workList[i].keys.toString() == workName.toString()) {
+        Note().removeWork(workList[i]);
         workList.remove(workList[i]);
         print(true);
       }
@@ -104,6 +112,7 @@ class GroupState extends State<Group> {
         Note().setAllNewNoteList(myList);
         setState(() {
           myList = Note.myList;
+          Note.allWork;
         });
       }
     }
@@ -122,6 +131,10 @@ class GroupState extends State<Group> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        leading: Icon(
+          Icons.arrow_back,
+          color: Colors.white,
+        ),
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
           IconButton(
@@ -152,106 +165,116 @@ class GroupState extends State<Group> {
             height: 500,
             child:
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              DropdownButtonHideUnderline(
-                child: DropdownButton2(
-                  isExpanded: true,
-                  hint: Row(
-                    children: const [
-                      Icon(
-                        Icons.list,
-                        size: 16,
-                        color: Colors.black,
-                      ),
-                      SizedBox(
-                        width: 4,
-                      ),
-                      Expanded(
-                        child: Text(
-                          'Select Item',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+              Container(
+                // color: Color(0xFF5E98E8),
+                margin: EdgeInsets.only(top: 10, bottom: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text('เลือกหมวดหมู่'),
+                    DropdownButtonHideUnderline(
+                      child: DropdownButton2(
+                        isExpanded: true,
+                        hint: Row(
+                          children: const [
+                            Icon(
+                              Icons.list,
+                              size: 16,
+                              color: Colors.black,
+                            ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: Text(
+                                'Select Item',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        items: myList
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item.keys.toString().substring(
+                                      1, item.keys.toString().length - 1),
+                                  child: Text(
+                                    item.keys.toString().substring(
+                                        1, item.keys.toString().length - 1),
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      // fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ))
+                            .toList(),
+                        value: widget.groupName,
+                        onChanged: (value) {
+                          setState(() {
+                            widget.groupName = value as String;
+                            findSelectedValue();
+                          });
+                        },
+                        buttonStyleData: ButtonStyleData(
+                          height: 30,
+                          width: 150,
+                          padding: const EdgeInsets.only(left: 14, right: 14),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white,
+                                offset: Offset(0, 0),
+                                blurRadius: 2.0,
+                                spreadRadius: 2.0,
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Colors.blueGrey,
+                              width: 1.0,
+                            ),
+                            color: Colors.white,
                           ),
-                          overflow: TextOverflow.ellipsis,
+                          elevation: 2,
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                          ),
+                          iconSize: 14,
+                          iconEnabledColor: Colors.black,
+                          iconDisabledColor: Colors.grey,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          maxHeight: 150,
+                          width: 150,
+                          padding: null,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            color: Colors.white,
+                          ),
+                          elevation: 8,
+                          offset: const Offset(0, 30),
+                          scrollbarTheme: ScrollbarThemeData(
+                            radius: const Radius.circular(40),
+                            thickness: MaterialStateProperty.all<double>(6),
+                            thumbVisibility:
+                                MaterialStateProperty.all<bool>(true),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          height: 30,
+                          padding: EdgeInsets.only(left: 10, right: 10),
                         ),
                       ),
-                    ],
-                  ),
-                  items: myList
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item.keys
-                                .toString()
-                                .substring(1, item.keys.toString().length - 1),
-                            child: Text(
-                              item.keys.toString().substring(
-                                  1, item.keys.toString().length - 1),
-                              style: const TextStyle(
-                                fontSize: 14,
-                                // fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ))
-                      .toList(),
-                  value: widget.groupName,
-                  onChanged: (value) {
-                    setState(() {
-                      widget.groupName = value as String;
-                      findSelectedValue();
-                    });
-                  },
-                  buttonStyleData: ButtonStyleData(
-                    height: 30,
-                    width: 150,
-                    padding: const EdgeInsets.only(left: 14, right: 14),
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.white,
-                          offset: Offset(0, 0),
-                          blurRadius: 0.0,
-                          spreadRadius: 0.0,
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 0.0,
-                      ),
-                      color: Colors.white,
                     ),
-                    elevation: 2,
-                  ),
-                  iconStyleData: const IconStyleData(
-                    icon: Icon(
-                      Icons.keyboard_arrow_down,
-                    ),
-                    iconSize: 14,
-                    iconEnabledColor: Colors.black,
-                    iconDisabledColor: Colors.grey,
-                  ),
-                  dropdownStyleData: DropdownStyleData(
-                    maxHeight: 150,
-                    width: 150,
-                    padding: null,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(14),
-                      color: Colors.white,
-                    ),
-                    elevation: 8,
-                    offset: const Offset(0, 30),
-                    scrollbarTheme: ScrollbarThemeData(
-                      radius: const Radius.circular(40),
-                      thickness: MaterialStateProperty.all<double>(6),
-                      thumbVisibility: MaterialStateProperty.all<bool>(true),
-                    ),
-                  ),
-                  menuItemStyleData: const MenuItemStyleData(
-                    height: 30,
-                    padding: EdgeInsets.only(left: 10, right: 10),
-                  ),
+                  ],
                 ),
               ),
               Container(
@@ -271,11 +294,10 @@ class GroupState extends State<Group> {
                                 style: TextStyle(
                                     fontFamily: 'Roboto', fontSize: 15),
                               ),
-                              trailing: Text(
-                                  e.values.toString().substring(2, 12) +
-                                      "," +
-                                      e.values.toString().substring(
-                                          20, e.values.toString().length - 2)),
+                              subtitle:
+                                  Text(e.values.toString().substring(2, 12)),
+                              trailing: Text(e.values.toString().substring(
+                                  20, e.values.toString().length - 2)),
                               onTap: () {
                                 showEditModal(e);
                               },
@@ -555,8 +577,8 @@ class GroupState extends State<Group> {
             // Like button
             IconButton(
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
                 },
                 icon: const Icon(
                   Icons.home,

@@ -3,6 +3,7 @@ import 'ListNotePage.dart';
 import 'package:flutter/material.dart';
 import 'Note.dart';
 import 'package:bs_flutter_modal/bs_flutter_modal.dart';
+import 'AddWork.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -17,9 +18,8 @@ class HomePageState extends State<HomePage> {
   var editGroupNameController;
   var editGroupname;
   var deleteGroupname;
-  final pages = [
-    ListNotePage(),
-  ];
+  var nameFirstGroup = "homework";
+  final pages = [ListNotePage(), AddWork()];
 
   deleteGroup(keyName) {
     print(keyName);
@@ -468,6 +468,8 @@ class HomePageState extends State<HomePage> {
 
   BottomAppBar buildMyNavBar() {
     return BottomAppBar(
+      // color: Color(0xFFFFFFFF),
+
       color: Color(0xFF5E98E8),
       // elevation: 6,
 
@@ -481,22 +483,33 @@ class HomePageState extends State<HomePage> {
           children: [
             // Like button
             IconButton(
-                onPressed: () {
-                  setState(() {
-                    pageIndex = 0;
-                  });
-                },
-                icon: const Icon(
-                  Icons.home,
-                  size: 30,
-                  color: Colors.white,
-                )),
+              onPressed: () {
+                setState(() {
+                  pageIndex = 0;
+                });
+              },
+              icon: (pageIndex == 0)
+                  ? const Icon(
+                      Icons.home,
+                      size: 30,
+                      color: Colors.white,
+                    )
+                  : const Icon(
+                      Icons.home,
+                      size: 30,
+                      color: Colors.white,
+                    ),
+            ),
             const SizedBox(
               width: 10,
             ),
             // Dislike button
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    pageIndex = 1;
+                  });
+                },
                 icon: const Icon(
                   Icons.add_box,
                   size: 30,
@@ -509,7 +522,7 @@ class HomePageState extends State<HomePage> {
             IconButton(
                 onPressed: () {},
                 icon: const Icon(
-                  Icons.import_export,
+                  Icons.event,
                   size: 30,
                   color: Colors.white,
                 )),
