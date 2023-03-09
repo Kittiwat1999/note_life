@@ -10,14 +10,68 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  List<dynamic> noteList = Note().getNoteList();
+  var noteList = Note().getNoteList();
   int pageIndex = 0;
   Map<String, List<Map<String, List<String>>>> newGroup = {'': []};
   var myList = Note.myList;
-
+  var editGroupNameController;
+  var editGroupname;
+  var deleteGroupname;
   final pages = [
     ListNotePage(),
   ];
+
+  deleteGroup(keyName) {
+    print(keyName);
+    for (var i = 0; i < myList.length; i++) {
+      print(myList[i]
+          .keys
+          .toString()
+          .substring(1, myList[i].keys.toString().length - 1));
+      if (myList[i]
+              .keys
+              .toString()
+              .substring(1, myList[i].keys.toString().length - 1) ==
+          keyName) {
+        myList.remove(myList[i]);
+        Note().setAllNewNoteList(myList);
+        setState(() {
+          myList = Note.myList;
+        });
+      }
+    }
+    print(myList);
+  }
+
+  editGroupNameMethods(
+    oldkeyName,
+    newkeyName,
+  ) {
+    for (var i = 0; i < myList.length; i++) {
+      if (myList[i]
+              .keys
+              .toString()
+              .substring(1, myList[i].keys.toString().length - 1) ==
+          oldkeyName) {
+        // newMap = myList[i][oldkeyName] as Map<String, List<Map<String, List<String>>>>;
+        var value = myList[i][oldkeyName] as List<Map<String, List<String>>>;
+        myList[i][newkeyName] = value;
+        myList[i].remove(oldkeyName);
+        print(myList[i]);
+      }
+    }
+    Note().setAllNewNoteList(myList);
+    setState(() {
+      myList = Note.myList;
+    });
+  }
+
+  @override
+  void initState() {
+    // deleteGroup("homework");
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(context) {
@@ -90,9 +144,186 @@ class HomePageState extends State<HomePage> {
                 children: myList
                     .map((e) => Card(
                           child: ListTile(
-                            leading: Icon(
-                              Icons.local_offer,
-                              color: Colors.red.shade700,
+                            trailing: IconButton(
+                              iconSize: 20,
+                              icon: Icon(
+                                Icons.delete_forever,
+                                color: Colors.grey,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  deleteGroupname = e.keys.toString().substring(
+                                      1, e.keys.toString().length - 1);
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => BsModal(
+                                    context: context,
+                                    dialog: BsModalDialog(
+                                      size: BsModalSize.sm,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      child: BsModalContent(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        children: [
+                                          BsModalContainer(
+                                              title: Text(
+                                                  'คุนแน่ใจหรือว่าต้องการลบ ${deleteGroupname}'),
+                                              closeButton: true),
+                                          BsModalContainer(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            actions: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.blue,
+                                                    elevation: 0.0,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  child: Text(
+                                                    "ยกเลิก",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  )),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    deleteGroup(
+                                                        deleteGroupname);
+                                                    Navigator.pop(context);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    elevation: 0.0,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  child: Text(
+                                                    "ลบ",
+                                                    style: TextStyle(
+                                                        color: Colors.grey),
+                                                  ))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            leading: IconButton(
+                              iconSize: 15,
+                              icon: Icon(
+                                Icons.create,
+                                color: Colors.blue,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  editGroupNameController =
+                                      new TextEditingController(
+                                          text:
+                                              '${e.keys.toString().substring(1, e.keys.toString().length - 1)}');
+                                });
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => BsModal(
+                                    context: context,
+                                    dialog: BsModalDialog(
+                                      size: BsModalSize.sm,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      child: BsModalContent(
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                        ),
+                                        children: [
+                                          BsModalContainer(
+                                              title: Text('แก้ใขชื่อหมวดหมู่'),
+                                              closeButton: true),
+                                          BsModalContainer(
+                                            child: TextFormField(
+                                              controller:
+                                                  editGroupNameController,
+                                              onChanged: (value) {
+                                                editGroupname = value;
+                                              },
+                                              // key: formKey,
+                                              decoration: const InputDecoration(
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                  Radius.circular(15),
+                                                )),
+                                                // hintText: 'Kittiwat',
+                                              ),
+                                            ),
+                                          ),
+                                          BsModalContainer(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            actions: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    elevation: 0.0,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  child: Text(
+                                                    "ยกเลิก",
+                                                    style: TextStyle(
+                                                        color: Colors.blue),
+                                                  )),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    // Map<String, List<Map<String, List<String>>>> editName = {'${editGroupname}': e.values};
+                                                    // print(e.runtimeType);
+                                                    editGroupNameMethods(
+                                                        e.keys.toString().substring(
+                                                            1,
+                                                            e.keys
+                                                                    .toString()
+                                                                    .length -
+                                                                1),
+                                                        editGroupname);
+                                                    Navigator.pop(context);
+                                                  },
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    elevation: 0.0,
+                                                    shadowColor:
+                                                        Colors.transparent,
+                                                  ),
+                                                  child: Text(
+                                                    "บันทึก",
+                                                    style: TextStyle(
+                                                        color: Colors.blue),
+                                                  ))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             title: Text(
                               e.keys

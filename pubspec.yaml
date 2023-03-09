@@ -38,6 +38,7 @@ dependencies:
   bs_flutter_modal: ^1.0.6
   dropdown_button2: ^2.0.0
   date_field: ^3.0.2
+  syncfusion_flutter_calendar: ^20.4.53
 
 dev_dependencies:
   flutter_test:
