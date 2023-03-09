@@ -131,9 +131,12 @@ class GroupState extends State<Group> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.arrow_back,
-          color: Colors.white,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () => {},
         ),
         iconTheme: IconThemeData(color: Colors.black),
         actions: [
@@ -157,7 +160,7 @@ class GroupState extends State<Group> {
               decoration: TextDecoration.none),
         )),
       ),
-      bottomNavigationBar: buildMyNavBar(),
+      // bottomNavigationBar: buildMyNavBar(),
       body: ListView(
         children: [
           Container(

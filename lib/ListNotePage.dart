@@ -8,6 +8,7 @@ class ListNotePage extends StatefulWidget {
 }
 
 class ListNotePageState extends State<ListNotePage> {
+  var groupName = Note.groupSelect;
   var myList = Note.myList;
   var getWorkList;
   List<Map<String, List>> workList = [

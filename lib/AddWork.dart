@@ -8,16 +8,12 @@ import 'package:date_field/date_field.dart';
 // import 'package:table_calendar/table_calendar.dart';
 
 class AddWork extends StatefulWidget {
-  AddWork({
-    super.key,
-  });
+  AddWork({super.key});
   State<AddWork> createState() => AddWorkState();
 }
 
 class AddWorkState extends State<AddWork> {
-  String addWorkGroup = Note.myList[0].keys
-      .toString()
-      .substring(1, Note.myList[0].keys.toString().length - 1);
+  var groupName = Note.groupSelect;
   var myList = Note.myList;
   var getWorkList;
   List<Map<String, List>> workList = [
@@ -43,8 +39,8 @@ class AddWorkState extends State<AddWork> {
               .keys
               .toString()
               .substring(1, myList[i].keys.toString().length - 1) ==
-          addWorkGroup) {
-        getWorkList = myList[i][addWorkGroup];
+          groupName) {
+        getWorkList = myList[i][groupName];
         // print(getWorkList);
         workList = getWorkList;
       }
@@ -57,8 +53,8 @@ class AddWorkState extends State<AddWork> {
               .keys
               .toString()
               .substring(1, myList[i].keys.toString().length - 1) ==
-          addWorkGroup) {
-        myList[i][addWorkGroup]?.add(newUnit);
+          groupName) {
+        myList[i][groupName]?.add(newUnit);
         Note().setAllNewNoteList(myList);
         print(newUnit.runtimeType);
         Note().addWork(newUnit);
@@ -87,8 +83,8 @@ class AddWorkState extends State<AddWork> {
               .keys
               .toString()
               .substring(1, myList[i].keys.toString().length - 1) ==
-          addWorkGroup) {
-        myList[i].remove(myList[i][addWorkGroup]);
+          groupName) {
+        myList[i].remove(myList[i][groupName]);
         Note().setAllNewNoteList(myList);
         setState(() {
           myList = Note.myList;
@@ -111,8 +107,8 @@ class AddWorkState extends State<AddWork> {
               .keys
               .toString()
               .substring(1, myList[i].keys.toString().length - 1) ==
-          addWorkGroup) {
-        myList[i].remove(myList[i][addWorkGroup]);
+          groupName) {
+        myList[i].remove(myList[i][groupName]);
         // myList[i][widget.groupName]
         Note().setAllNewNoteList(myList);
         setState(() {
@@ -190,10 +186,10 @@ class AddWorkState extends State<AddWork> {
                                 ),
                               ))
                           .toList(),
-                      value: addWorkGroup,
+                      value: groupName,
                       onChanged: (value) {
                         setState(() {
-                          addWorkGroup = value as String;
+                          groupName = value as String;
                           findSelectedValue();
                         });
                       },
