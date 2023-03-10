@@ -22,6 +22,8 @@ class AddWorkState extends State<AddWork> {
     // }
   ];
 
+  Map<String, List<Map<String, List<String>>>> newGroup = {'': []};
+
   List<String> loopList = ['ครั้งเดียว', 'สัปดาห์', 'เดือน', 'ปี'];
 
   var newUnitName = "Noname";
@@ -55,10 +57,6 @@ class AddWorkState extends State<AddWork> {
               .substring(1, myList[i].keys.toString().length - 1) ==
           groupName) {
         myList[i][groupName]?.add(newUnit);
-        Note().setAllNewNoteList(myList);
-        print(newUnit.runtimeType);
-        Note().addWork(newUnit);
-        print(Note().getAllWork());
         setState(() {
           myList = Note.myList;
           Note.allWork;
@@ -71,7 +69,6 @@ class AddWorkState extends State<AddWork> {
   editUniteWork(workName, editUnit) {
     for (var i = 0; i < workList.length; i++) {
       if (workList[i].keys.toString() == workName.toString()) {
-        Note().editWork(editUnit, workList[i]);
         workList.remove(workList[i]);
         workList.add(editUnit);
 
@@ -85,10 +82,8 @@ class AddWorkState extends State<AddWork> {
               .substring(1, myList[i].keys.toString().length - 1) ==
           groupName) {
         myList[i].remove(myList[i][groupName]);
-        Note().setAllNewNoteList(myList);
         setState(() {
           myList = Note.myList;
-          Note.allWork;
         });
       }
     }
@@ -97,7 +92,6 @@ class AddWorkState extends State<AddWork> {
   deleteUnitData(workName) {
     for (var i = 0; i < workList.length; i++) {
       if (workList[i].keys.toString() == workName.toString()) {
-        Note().removeWork(workList[i]);
         workList.remove(workList[i]);
         print(true);
       }
@@ -113,7 +107,6 @@ class AddWorkState extends State<AddWork> {
         Note().setAllNewNoteList(myList);
         setState(() {
           myList = Note.myList;
-          Note.allWork;
         });
       }
     }

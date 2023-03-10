@@ -15,6 +15,7 @@ class HomePageState extends State<HomePage> {
   // String? selectGroup = Note.myList[0].keys
   //     .toString()
   //     .substring(1, Note.myList[0].keys.toString().length - 1);
+  String groupNameOnHome = '';
   var noteList = Note().getNoteList();
   int pageIndex = 0;
   Map<String, List<Map<String, List<String>>>> newGroup = {'': []};
@@ -22,7 +23,11 @@ class HomePageState extends State<HomePage> {
   var editGroupNameController;
   var editGroupname;
   var deleteGroupname;
-  var nameFirstGroup = "homework";
+  var nameFirstGroup = (Note.myList.length > 0)
+      ? Note.myList[0].keys
+          .toString()
+          .substring(1, Note.myList[0].keys.toString().length - 1)
+      : "no Work";
   final pages = [ListNotePage(), AddWork()];
 
   deleteGroup(keyName) {
@@ -537,9 +542,87 @@ class HomePageState extends State<HomePage> {
             // Dislike button
             IconButton(
                 onPressed: () {
-                  setState(() {
-                    pageIndex = 1;
-                  });
+                  if (myList.isEmpty) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => BsModal(
+                        context: context,
+                        dialog: BsModalDialog(
+                          size: BsModalSize.sm,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          child: BsModalContent(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                            ),
+                            children: [
+                              BsModalContainer(
+                                  title: Text('สร้างหมวดหมู่ใหม่'),
+                                  closeButton: true),
+                              BsModalContainer(
+                                child: TextFormField(
+                                  // controller: emailController,
+                                  onChanged: (value) {
+                                    groupNameOnHome = value;
+                                    newGroup = {'$value': []};
+                                  },
+                                  // key: formKey,
+                                  decoration: const InputDecoration(
+                                    hintText: "กรอกชื่อหมวดหมู่",
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                      Radius.circular(15),
+                                    )),
+                                    // hintText: 'Kittiwat',
+                                  ),
+                                ),
+                              ),
+                              BsModalContainer(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                actions: [
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        elevation: 0.0,
+                                        shadowColor: Colors.transparent,
+                                      ),
+                                      child: Text(
+                                        "ยกเลิก",
+                                        style: TextStyle(color: Colors.blue),
+                                      )),
+                                  ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          Note().setNoteList(newGroup);
+                                          Note.groupSelect = groupNameOnHome;
+                                        });
+                                        Navigator.pop(context);
+                                        print(Note.myList.toString());
+                                        pageIndex = 1;
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        elevation: 0.0,
+                                        shadowColor: Colors.transparent,
+                                      ),
+                                      child: Text(
+                                        "สร้าง",
+                                        style: TextStyle(color: Colors.blue),
+                                      ))
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    setState(() {
+                      pageIndex = 1;
+                    });
+                  }
                 },
                 icon: const Icon(
                   Icons.add_box,
