@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'Note.dart';
 
 class Calendar extends StatefulWidget {
   Calendar({super.key});
@@ -8,36 +9,65 @@ class Calendar extends StatefulWidget {
 
 class CalendarState extends State<Calendar> {
   Widget build(context) {
-    return ListView(
-      children: [
-        Card(
-          child: SfCalendar(
-            onSelectionChanged: (calendarSelectionDetails) {
-              print(calendarSelectionDetails.date);
-            },
-            showDatePickerButton: true,
-            view: CalendarView.month,
-            dataSource: MeetingDataSource(_getDataSource()),
-            // by default the month appointment display mode set as Indicator, we can
-            // change the display mode as appointment using the appointment display
-            // mode property
-            monthViewSettings: const MonthViewSettings(
-                appointmentDisplayMode:
-                    MonthAppointmentDisplayMode.appointment),
-          ),
-        )
-      ],
+    return Card(
+      child: SfCalendar(
+        selectionDecoration: BoxDecoration(
+            color: Colors.transparent,
+            border: Border.all(color: Colors.blue, width: 1),
+            shape: BoxShape.rectangle,
+            borderRadius: const BorderRadius.all(Radius.circular(4))),
+        onSelectionChanged: (calendarSelectionDetails) {
+          print(calendarSelectionDetails.date);
+        },
+        showDatePickerButton: true,
+        view: CalendarView.month,
+        dataSource: MeetingDataSource(_getDataSource()),
+        // by default the month appointment display mode set as Indicator, we can
+        // change the display mode as appointment using the appointment display
+        // mode property
+        monthViewSettings: const MonthViewSettings(
+            appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
+            showAgenda: true),
+        blackoutDates: [
+          DateTime.now().subtract(Duration(hours: 48)),
+          DateTime.now().subtract(Duration(hours: 24)),
+        ],
+      ),
     );
   }
 
   List<Meeting> _getDataSource() {
     final List<Meeting> meetings = <Meeting>[];
-    final DateTime today = DateTime.now();
-    final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
-    final DateTime endTime = startTime.add(const Duration(hours: 2));
-    var newmeet = Meeting('kittiwat', startTime, endTime, Colors.green, false);
-    print("${newmeet.from} check check");
-    meetings.add(newmeet);
+    // List<List<String>> taskDetails = [];
+    Note.myList.forEach((category) {
+      category.values.forEach((tasks) {
+        tasks.forEach((task) {
+          task.forEach((name, details) {
+            var starttime = DateTime.parse('${details[0]}T${details[1]}:00Z')
+                .subtract(Duration(days: 1));
+            var Tnewmeet = Meeting(
+                '${name}',
+                starttime,
+                starttime.add(const Duration(minutes: 10)),
+                Colors.green,
+                false);
+            // print(Tnewmeet.from);
+            meetings.add(Tnewmeet);
+            // taskDetails.add(taskDetail);
+          });
+        });
+      });
+    });
+    // DateTime.parse('2000-01-01T00:00:00Z');
+    // final DateTime today = DateTime.now();
+    // final DateTime startTime = DateTime(today.year, today.month, today.day, 9);
+    // final DateTime endTime = startTime.add(const Duration(hours: 2));
+    // var newmeet = Meeting('kittiwat', startTime, endTime, Colors.green, false);
+    // var newmeet2 = Meeting('kittiwat', startTime, endTime, Colors.green, false);
+    // print("${newmeet.from} check check");
+    // meetings.add(newmeet);
+    // meetings.add(newmeet2);
+
     return meetings;
   }
 }

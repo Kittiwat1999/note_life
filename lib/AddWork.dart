@@ -25,10 +25,9 @@ class AddWorkState extends State<AddWork> {
   Map<String, List<Map<String, List<String>>>> newGroup = {'': []};
 
   List<String> loopList = ['ครั้งเดียว', 'สัปดาห์', 'เดือน', 'ปี'];
-
   var newUnitName = "Noname";
-  var newUnitDate = DateTime.now().toString();
-  var newUnitTime = DateTime.now().toString();
+  var newUnitDate = DateTime.now().toString().substring(0, 10);
+  var newUnitTime = DateTime.now().toString().substring(11, 16);
   var newUnitLoop = 'ครั้งเดียว';
 
   Map<String, List<String>> newUnit = {
@@ -117,7 +116,9 @@ class AddWorkState extends State<AddWork> {
     // print(Note.myList[1].keys.toString());
     // TODO: implement initState
     findSelectedValue();
-    // addNewUnitWork();
+    print(newUnitDate);
+    print(newUnitDate.length);
+    print(newUnitTime);
     super.initState();
   }
 
@@ -360,6 +361,10 @@ class AddWorkState extends State<AddWork> {
                                           newUnitDate =
                                               value.toString().substring(0, 10);
                                           print(newUnitDate);
+                                          print(value
+                                              .toString()
+                                              .substring(0, 10)
+                                              .length);
                                         },
                                       ),
                                       SizedBox(
