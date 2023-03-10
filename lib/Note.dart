@@ -10,7 +10,16 @@ class Note {
         }
       ]
     },
-    {'project': []}
+    {
+      'project': [
+        {
+          'project1': ['2023-04-16', '19:50', 'ครั้งเดียว']
+        },
+        {
+          'project2': ['2023-04-16', '19:50', 'ครั้งเดียว']
+        }
+      ]
+    }
   ];
   static List<Map<String, List<String>>> allWork = [
     {

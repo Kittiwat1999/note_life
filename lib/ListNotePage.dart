@@ -124,86 +124,118 @@ class ListNotePageState extends State<ListNotePage> {
         : Center(
             child: Container(
               child: ListView(
-                children: Note.allWork
-                    .map((e) => Card(
-                          child: ListTile(
-                            leading: Icon(
-                              Icons.event_note,
-                              color: Colors.blue.shade700,
-                              size: 20,
+                  children: Note.myList
+                      .map((e) => Container(
+                            child: Column(
+                              children: e.values
+                                  .map((valE) => Container(
+                                        child: Column(
+                                          children: valE
+                                              .map((unitWork) => Card(
+                                                    child: ListTile(
+                                                      title: Text(unitWork.keys
+                                                          .toString()
+                                                          .substring(
+                                                              1,
+                                                              unitWork.keys
+                                                                      .toString()
+                                                                      .length -
+                                                                  1)),
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                        ),
+                                      ))
+                                  .toList(),
                             ),
-                            title: Text(e.keys
-                                .toString()
-                                .substring(1, e.keys.toString().length - 1)),
-                            subtitle: Text(
-                                e.values.toString().substring(2, 12) +
-                                    " " +
-                                    e.values.toString().substring(
-                                        20, e.values.toString().length - 2)),
-                            onTap: () => showDialog(
-                              context: context,
-                              builder: (context) => BsModal(
-                                context: context,
-                                dialog: BsModalDialog(
-                                  size: BsModalSize.sm,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  child: BsModalContent(
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                    ),
-                                    children: [
-                                      BsModalContainer(
-                                          title: Text(
-                                            '\"${e.keys.toString().substring(1, e.keys.toString().length - 1)}\" ชองคุณเสร็จแล้วหรือไม่',
-                                            style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.normal),
-                                          ),
-                                          closeButton: true),
-                                      BsModalContainer(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.end,
-                                        actions: [
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.white,
-                                                elevation: 0.0,
-                                                shadowColor: Colors.transparent,
-                                              ),
-                                              child: Text(
-                                                "ไม่",
-                                                style: TextStyle(
-                                                    color: Colors.grey),
-                                              )),
-                                          ElevatedButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.white,
-                                                elevation: 0.0,
-                                                shadowColor: Colors.transparent,
-                                              ),
-                                              child: Text(
-                                                "เสร็จสิ้น",
-                                                style: TextStyle(
-                                                    color: Colors.blue),
-                                              ))
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ))
-                    .toList(),
-              ),
+                          ))
+                      .toList()),
             ),
           );
   }
 }
+
+        // : Center(
+        //     child: Container(
+        //       child: ListView(
+        //         children: Note.allWork
+        //             .map((e) => Card(
+        //                   child: ListTile(
+        //                     leading: Icon(
+        //                       Icons.event_note,
+        //                       color: Colors.blue.shade700,
+        //                       size: 20,
+        //                     ),
+        //                     title: Text(e.keys
+        //                         .toString()
+        //                         .substring(1, e.keys.toString().length - 1)),
+        //                     subtitle: Text(
+        //                         e.values.toString().substring(2, 12) +
+        //                             " " +
+        //                             e.values.toString().substring(
+        //                                 20, e.values.toString().length - 2)),
+        //                     onTap: () => showDialog(
+        //                       context: context,
+        //                       builder: (context) => BsModal(
+        //                         context: context,
+        //                         dialog: BsModalDialog(
+        //                           size: BsModalSize.sm,
+        //                           crossAxisAlignment: CrossAxisAlignment.center,
+        //                           child: BsModalContent(
+        //                             decoration: BoxDecoration(
+        //                               color: Colors.white,
+        //                             ),
+        //                             children: [
+        //                               BsModalContainer(
+        //                                   title: Text(
+        //                                     '\"${e.keys.toString().substring(1, e.keys.toString().length - 1)}\" ชองคุณเสร็จแล้วหรือไม่',
+        //                                     style: TextStyle(
+        //                                         fontSize: 14,
+        //                                         fontWeight: FontWeight.normal),
+        //                                   ),
+        //                                   closeButton: true),
+        //                               BsModalContainer(
+        //                                 mainAxisAlignment:
+        //                                     MainAxisAlignment.end,
+        //                                 actions: [
+        //                                   ElevatedButton(
+        //                                       onPressed: () {
+        //                                         Navigator.pop(context);
+        //                                       },
+        //                                       style: ElevatedButton.styleFrom(
+        //                                         backgroundColor: Colors.white,
+        //                                         elevation: 0.0,
+        //                                         shadowColor: Colors.transparent,
+        //                                       ),
+        //                                       child: Text(
+        //                                         "ไม่",
+        //                                         style: TextStyle(
+        //                                             color: Colors.grey),
+        //                                       )),
+        //                                   ElevatedButton(
+        //                                       onPressed: () {
+        //                                         Navigator.pop(context);
+        //                                       },
+        //                                       style: ElevatedButton.styleFrom(
+        //                                         backgroundColor: Colors.white,
+        //                                         elevation: 0.0,
+        //                                         shadowColor: Colors.transparent,
+        //                                       ),
+        //                                       child: Text(
+        //                                         "เสร็จสิ้น",
+        //                                         style: TextStyle(
+        //                                             color: Colors.blue),
+        //                                       ))
+        //                                 ],
+        //                               )
+        //                             ],
+        //                           ),
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 ))
+        //             .toList(),
+        //       ),
+        //     ),
+        //   );
