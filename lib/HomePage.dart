@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'Note.dart';
 import 'package:bs_flutter_modal/bs_flutter_modal.dart';
 import 'AddWork.dart';
+import 'Calendar.dart';
 
 class HomePage extends StatefulWidget {
   int? setpage = 0;
@@ -12,9 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class HomePageState extends State<HomePage> {
-  // String? selectGroup = Note.myList[0].keys
-  //     .toString()
-  //     .substring(1, Note.myList[0].keys.toString().length - 1);
   String groupNameOnHome = '';
   var noteList = Note().getNoteList();
   int pageIndex = 0;
@@ -28,7 +26,7 @@ class HomePageState extends State<HomePage> {
           .toString()
           .substring(1, Note.myList[0].keys.toString().length - 1)
       : "no Work";
-  final pages = [ListNotePage(), AddWork()];
+  final pages = [ListNotePage(), AddWork(), Calendar()];
 
   deleteGroup(keyName) {
     print(keyName);
@@ -634,7 +632,11 @@ class HomePageState extends State<HomePage> {
             ),
             // Comment button
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    pageIndex = 2;
+                  });
+                },
                 icon: const Icon(
                   Icons.event,
                   size: 30,

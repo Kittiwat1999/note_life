@@ -108,84 +108,126 @@ class ListNotePageState extends State<ListNotePage> {
   }
 
   Center checkNoteList() {
-    return Center(
-      child: Container(
-        child: ListView(
-            children: Note.myList
-                .map((e) => Container(
-                      child: Column(
-                        children: e.values
-                            .map((valE) => Container(
-                                  child: Column(
-                                    children: valE
-                                        .map((unitWork) => Card(
-                                              child: ListTile(
-                                                leading: Icon(
-                                                  Icons.event_note,
-                                                  color: Colors.blue.shade700,
-                                                  size: 20,
-                                                ),
-                                                title: Text(unitWork.keys
-                                                    .toString()
-                                                    .substring(
-                                                        1,
-                                                        unitWork.keys
-                                                                .toString()
-                                                                .length -
-                                                            1)),
-                                                subtitle: Text(unitWork.values
-                                                        .toString()
-                                                        .substring(2, 12) +
-                                                    " " +
-                                                    unitWork.values
-                                                        .toString()
-                                                        .substring(14, 19) +
-                                                    " " +
-                                                    unitWork.values
-                                                        .toString()
-                                                        .substring(
-                                                            20,
-                                                            unitWork.values
-                                                                    .toString()
-                                                                    .length -
-                                                                2)),
-                                                trailing: Switch(
-                                                  // This bool value toggles the switch.
-                                                  value: buttonList?[unitWork
-                                                      .keys
-                                                      .toString()
-                                                      .substring(
-                                                          1,
-                                                          unitWork.keys
-                                                                  .toString()
-                                                                  .length -
-                                                              1)] as bool,
-                                                  activeColor: Colors.blue,
-                                                  onChanged: (bool value) {
-                                                    // This is called when the user toggles the switch.
-                                                    setState(() {
-                                                      buttonList?[unitWork.keys
+    return (buttonList.isEmpty)
+        ? Center(
+            child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'img/frame161.png',
+                width: 150,
+                fit: BoxFit.cover,
+                // color: Colors.red,
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "ยังไม่มีงาน",
+                style: TextStyle(
+                    // fontFamily: 'Roboto',
+                    fontSize: 20,
+                    color: Colors.black,
+                    decoration: TextDecoration.none),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Text(
+                "เพิ่มและติดตามสิ่งที่ต้องทำใน Note Life",
+                style: TextStyle(
+                    // fontFamily: 'Roboto',
+                    fontSize: 12,
+                    color: Colors.black,
+                    decoration: TextDecoration.none),
+              )
+            ],
+          ))
+        : Center(
+            child: Container(
+              child: ListView(
+                  children: Note.myList
+                      .map((e) => Container(
+                            child: Column(
+                              children: e.values
+                                  .map((valE) => Container(
+                                        child: Column(
+                                          children: valE
+                                              .map((unitWork) => Card(
+                                                    child: ListTile(
+                                                      leading: Icon(
+                                                        Icons.event_note,
+                                                        color: Colors
+                                                            .blue.shade700,
+                                                        size: 20,
+                                                      ),
+                                                      title: Text(unitWork.keys
                                                           .toString()
                                                           .substring(
                                                               1,
                                                               unitWork.keys
                                                                       .toString()
                                                                       .length -
-                                                                  1)] = value;
-                                                    });
-                                                  },
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                    ))
-                .toList()),
-      ),
-    );
+                                                                  1)),
+                                                      subtitle: Text(unitWork
+                                                              .values
+                                                              .toString()
+                                                              .substring(
+                                                                  2, 12) +
+                                                          " " +
+                                                          unitWork.values
+                                                              .toString()
+                                                              .substring(
+                                                                  14, 19) +
+                                                          " " +
+                                                          unitWork.values
+                                                              .toString()
+                                                              .substring(
+                                                                  20,
+                                                                  unitWork.values
+                                                                          .toString()
+                                                                          .length -
+                                                                      2)),
+                                                      trailing: Switch(
+                                                        // This bool value toggles the switch.
+                                                        value: buttonList?[unitWork
+                                                            .keys
+                                                            .toString()
+                                                            .substring(
+                                                                1,
+                                                                unitWork.keys
+                                                                        .toString()
+                                                                        .length -
+                                                                    1)] as bool,
+                                                        activeColor:
+                                                            Colors.blue,
+                                                        onChanged:
+                                                            (bool value) {
+                                                          // This is called when the user toggles the switch.
+                                                          setState(() {
+                                                            buttonList?[unitWork
+                                                                .keys
+                                                                .toString()
+                                                                .substring(
+                                                                    1,
+                                                                    unitWork.keys
+                                                                            .toString()
+                                                                            .length -
+                                                                        1)] = value;
+                                                          });
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          ))
+                      .toList()),
+            ),
+          );
   }
 }
 
