@@ -39,6 +39,7 @@ dependencies:
   dropdown_button2: ^2.0.0
   date_field: ^3.0.2
   syncfusion_flutter_calendar: ^20.4.53
+  d_chart: ^2.2.11
 
 dev_dependencies:
   flutter_test:

@@ -5,6 +5,7 @@ import 'Note.dart';
 import 'package:bs_flutter_modal/bs_flutter_modal.dart';
 import 'AddWork.dart';
 import 'Calendar.dart';
+import 'Chart.dart';
 
 class HomePage extends StatefulWidget {
   int? setpage = 0;
@@ -26,7 +27,7 @@ class HomePageState extends State<HomePage> {
           .toString()
           .substring(1, Note.myList[0].keys.toString().length - 1)
       : "no Work";
-  final pages = [ListNotePage(), AddWork(), Calendar()];
+  final pages = [ListNotePage(), AddWork(), Calendar(), Chart()];
 
   deleteGroup(keyName) {
     print(keyName);
@@ -387,13 +388,13 @@ class HomePageState extends State<HomePage> {
                                             fontFamily: 'Roboto', fontSize: 15),
                                       ),
                                       onTap: () {
-                                        Navigator.pop(context);
                                         setState(() {
                                           Note.groupSelect = e.keys
                                               .toString()
                                               .substring(1,
                                                   e.keys.toString().length - 1);
                                         });
+                                        Navigator.pop(context);
                                         pageIndex = 1;
                                       },
                                     ),
@@ -505,17 +506,67 @@ class HomePageState extends State<HomePage> {
                   ),
                 )
               : null,
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              showModalBottomSheet<void>(
+                // context and builder are
+                // required properties in this widget
+                context: context,
+                builder: (BuildContext context) {
+                  // we set up a container inside which
+                  // we create center column and display text
+
+                  // Returning SizedBox instead of a Container
+                  return SizedBox(
+                    height: 200,
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          ListTile(
+                            leading: Icon(Icons.check, color: Colors.blue),
+                            title: Text("ลำดับการสร้าง"),
+                            onTap: () => Navigator.pop(context),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.check, color: Colors.white),
+                            title: Text("วันที่"),
+                            onTap: () => Navigator.pop(context),
+                          ),
+                          ListTile(
+                            leading: Icon(Icons.check, color: Colors.white),
+                            title: Text("ติดดาว"),
+                            onTap: () => Navigator.pop(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            backgroundColor: Colors.white,
+            icon: const Icon(Icons.import_export, color: Colors.blue),
+            label: const Text(
+              'จัดเรียง',
+              style: TextStyle(color: Colors.blue),
+            ),
+          ),
           appBar: AppBar(
             // automaticallyImplyLeading: false,
             iconTheme: IconThemeData(color: Colors.black),
             actions: [
               IconButton(
                 icon: const Icon(
-                  Icons.add_alert,
-                  color: Colors.white,
+                  Icons.insert_chart,
+                  color: Colors.black,
                 ),
                 tooltip: 'Show Snackbar',
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    pageIndex = 3;
+                  });
+                },
               ),
             ],
             backgroundColor: Colors.white,
