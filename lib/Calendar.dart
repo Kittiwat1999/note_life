@@ -29,8 +29,8 @@ class CalendarState extends State<Calendar> {
             appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
             showAgenda: true),
         blackoutDates: [
-          DateTime.now().subtract(Duration(hours: 48)),
-          DateTime.now().subtract(Duration(hours: 24)),
+          // DateTime.now().subtract(Duration(hours: 48)),
+          // DateTime.now().subtract(Duration(hours: 24)),
         ],
       ),
     );
@@ -43,8 +43,9 @@ class CalendarState extends State<Calendar> {
       category.values.forEach((tasks) {
         tasks.forEach((task) {
           task.forEach((name, details) {
-            var starttime = DateTime.parse('${details[0]}T${details[1]}:00Z')
-                .subtract(Duration(days: 1));
+            var starttime = DateTime.parse('${details[0]} ${details[1]}')
+                // .subtract(Duration(days: 1))
+                ;
             var Tnewmeet = Meeting(
                 '${name}',
                 starttime,
