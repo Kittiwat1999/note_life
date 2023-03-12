@@ -180,10 +180,10 @@ class AddWorkState extends State<AddWork> {
                                 ),
                               ))
                           .toList(),
-                      value: groupName,
+                      value: Note.groupSelect,
                       onChanged: (value) {
                         setState(() {
-                          groupName = value as String;
+                          Note.groupSelect = value as String;
                           findSelectedValue();
                         });
                       },
