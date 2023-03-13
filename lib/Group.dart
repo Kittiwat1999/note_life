@@ -822,7 +822,7 @@ class GroupState extends State<Group> {
                               elevation: 0.0,
                               shadowColor: Colors.transparent,
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Icon(

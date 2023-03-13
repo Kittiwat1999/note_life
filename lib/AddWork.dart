@@ -42,8 +42,11 @@ class AddWorkState extends State<AddWork> {
               .substring(1, myList[i].keys.toString().length - 1) ==
           groupName) {
         getWorkList = myList[i][groupName];
-        // print(getWorkList);
-        workList = getWorkList;
+        print(getWorkList.runtimeType);
+
+        setState(() {
+          workList = getWorkList;
+        });
       }
     }
   }
@@ -116,9 +119,6 @@ class AddWorkState extends State<AddWork> {
     // print(Note.myList[1].keys.toString());
     // TODO: implement initState
     findSelectedValue();
-    print(newUnitDate);
-    print(newUnitDate.length);
-    print(newUnitTime);
     super.initState();
   }
 
@@ -184,6 +184,7 @@ class AddWorkState extends State<AddWork> {
                       onChanged: (value) {
                         setState(() {
                           Note.groupSelect = value as String;
+                          groupName = Note.groupSelect;
                           findSelectedValue();
                         });
                       },
@@ -731,7 +732,7 @@ class AddWorkState extends State<AddWork> {
                               elevation: 0.0,
                               shadowColor: Colors.transparent,
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Icon(
